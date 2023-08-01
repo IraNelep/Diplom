@@ -1,0 +1,16 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Добавление выкройки</h1>
+
+<h2>{{ error }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="center">
+        <button class="btn">Создать</button>
+    </div>
+</form>
+
+{% endblock %}

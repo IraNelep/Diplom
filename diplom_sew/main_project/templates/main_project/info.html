@@ -1,0 +1,15 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+
+<h3>
+    Оставьте нам свой отзыв!
+</h3>
+<!--форма для отзыва-->
+<form action="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button>Отправить</button>
+</form>
+
+{% endblock %}
