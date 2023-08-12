@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;1,600&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Вышивалка</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="{% static 'css/style11.css' %}">
     <!-- Favicon-->
     <link rel="shortcut icon" href="{% static 'images/cat.png' %}" type="image/x-icon"/>
@@ -18,13 +18,13 @@
 <div class="menu">
     <div class="wrap1">
         <ul>
-            <li class="logo">Пользователь: {{ user.username }}</li>
+            <li ><a href="" class="main">Пользователь: {{ user.username }}</a></li>
             <li><a href="{% url 'home' %}" class="main">Главная</a></li>
             <li><a href="{% url 'sews' %}" class="main">Добавить выкройки</a></li>
-            <li>
+            <li >
                 <form action="{% url 'logoutuser' %}" method="post">
                     {% csrf_token %}
-                    <button class="top">Выйти</button>
+                    <button class="main">Выйти</button>
                 </form>
             </li>
         </ul>
@@ -39,23 +39,24 @@
             <li><a href="{% url 'signupuser' %}" class="main">Зарегистрироваться</a></li>
             <li><a href="{% url 'loginuser' %}" class="main">Войти</a></li>
             <li><a href="{% url 'info' %}" class="main">Информация о сайте</a></li>
-        </ul>{% endif %}
-<!--        <table class="minitable">&lt;!&ndash; форма входа        &ndash;&gt;-->
-<!--            <tr>-->
-<!--                <td><b>Добро пожаловать!</b></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td></td>-->
-<!--            </tr>-->
-<!--        </table>-->
-<!--        <table class="minitable">&lt;!&ndash; погода       &ndash;&gt;-->
-<!--            <tr>-->
-<!--                <td><b>Погода</b></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td></td>-->
-<!--            </tr>-->
-<!--        </table>-->
+        </ul>
+        {% endif %}
+        <!--        <table class="minitable">&lt;!&ndash; форма входа        &ndash;&gt;-->
+        <!--            <tr>-->
+        <!--                <td><b>Добро пожаловать!</b></td>-->
+        <!--            </tr>-->
+        <!--            <tr>-->
+        <!--                <td></td>-->
+        <!--            </tr>-->
+        <!--        </table>-->
+        <!--        <table class="minitable">&lt;!&ndash; погода       &ndash;&gt;-->
+        <!--            <tr>-->
+        <!--                <td><b>Погода</b></td>-->
+        <!--            </tr>-->
+        <!--            <tr>-->
+        <!--                <td></td>-->
+        <!--            </tr>-->
+        <!--        </table>-->
     </div>
 </div>
 <div class="content">
@@ -71,17 +72,17 @@
     <div class="bottom">
         <table class="menutable">
             <tr>
-                <td>
-                    <img src="{% static 'images/menu_arr.png' %}" alt=""><a href="" class="name_table">МЕНЮ
+                <td><img src="{% static 'images/menu_arr.png' %}" alt=""><a href="" class="name_table">МЕНЮ
                     САЙТА</a><br>
-                    <img src="{% static 'images/1.png' %}" alt=""><a href="{% url 'shemi_vishivki' %}" class="tabl">Схемы вышивки</a><br>
-                    <img src="{% static 'images/2.png' %}" alt=""><a href="" class="tabl">Схемы вязания</a><br>
-                    <img src="{% static 'images/3.png' %}" alt=""><a href="" class="tabl">Схемы плетения</a><br>
-                    <img src="{% static 'images/4.png' %}" alt=""><a href="" class="tabl">Книги</a><br>
-                    <img src="{% static 'images/5.png' %}" alt=""><a href="" class="tabl">Журналы</a><br>
-                    <img src="{% static 'images/6.png' %}" alt=""><a href="" class="tabl">Статьи</a><br>
-                    <img src="{% static 'images/7.png' %}" alt=""><a href="" class="tabl">Таблицы</a><br>
-                    <img src="{% static 'images/8.png' %}" alt=""><a href="" class="tabl">Калькуляторы</a><br>
+
+                                        <img src="{% static 'images/1.png' %}" alt=""><a href="{% url 'shemi_vishivki' %}" class="tabl">Схемы вышивки</a><br>
+                                        <img src="{% static 'images/2.png' %}" alt=""><a href="" class="tabl">Схемы вязания</a><br>
+                                        <img src="{% static 'images/3.png' %}" alt=""><a href="" class="tabl">Схемы плетения</a><br>
+                                        <img src="{% static 'images/4.png' %}" alt=""><a href="" class="tabl">Книги</a><br>
+                                        <img src="{% static 'images/5.png' %}" alt=""><a href="" class="tabl">Журналы</a><br>
+                                        <img src="{% static 'images/6.png' %}" alt=""><a href="" class="tabl">Статьи</a><br>
+                                        <img src="{% static 'images/7.png' %}" alt=""><a href="" class="tabl">Таблицы</a><br>
+                                        <img src="{% static 'images/8.png' %}" alt=""><a href="" class="tabl">Калькуляторы</a><br>
                 </td>
             </tr>
 

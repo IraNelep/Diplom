@@ -1,15 +1,13 @@
 from django.contrib import admin
 from django.contrib import admin
 from .models import *
-# from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from .models import *
-
-# from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
-
 from django.utils.safestring import mark_safe
-# admin.site.register(Todo, BlogAdmin)
+# from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
+
 #
 #
 # class BlogAdminForm(forms.ModelForm):
@@ -48,4 +46,5 @@ class BlogAdmin(admin.ModelAdmin):  # перевод транслитом
 
 
 admin.site.register(Blog, BlogAdmin)
+admin.site.register(Category)
 # admin.site.register(Todo, CategoryAdmin)

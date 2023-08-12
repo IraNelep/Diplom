@@ -84,10 +84,10 @@ ul {
     border: 3px solid white;
     padding: 55px;
     margin-left: 50px;
+    margin-bottom: 0;
     text-align: center;
     display: flex;
     flex-wrap: wrap;
-    font-size: large;
     background: rgba(241, 221, 179, 0.5);
 }
 
@@ -157,6 +157,10 @@ a {
 button {
     background: rgb(250, 186, 239, 0.7);
     border: 3px solid white;
+    font-family: 'Raleway', sans-serif;
+    color: #060007;
+    font-weight: bold;
+    margin-top: 0;
 
 }
 

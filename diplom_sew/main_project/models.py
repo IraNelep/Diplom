@@ -11,6 +11,7 @@ class Blog(models.Model):
     time_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата публикации")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.title
@@ -18,19 +19,20 @@ class Blog(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
 
-    class Meta: # перевод админки на русский язык
+    class Meta:  # перевод админки на русский язык
         verbose_name = 'Выкройка'
         verbose_name_plural = 'Выкройки'
         ordering = ['-time_created']
 
 
 class Todo(models.Model):
-    title = models.CharField(max_length=100)
-    memo = models.TextField(blank=True)
+    title = models.CharField(max_length=100, verbose_name='Название выкройки')
     created = models.DateTimeField(auto_now_add=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     important = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, null=True, verbose_name='Изображение')
+    category = models.CharField(max_length=100, verbose_name='Категория выкройки')
 
     def __str__(self):
         return self.title
@@ -43,3 +45,18 @@ class Letter(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_slug': self.slug})
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
