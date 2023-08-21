@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.utils import timezone
-from .models import *
+from .models import Product, ProductCategory
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from .forms import *
@@ -15,23 +15,23 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 
-class BlogCategory(ListView):
-    model = Todo
-    template_name = 'main_project/home.html'
-    context_object_name = 'posts'
-    allow_empty = False
+# class BlogCategory(ListView):
+#     model = Todo
+#     template_name = 'main_project/home.html'
+#     context_object_name = 'posts'
+#     allow_empty = False
+#
+#     def get_queryset(self):
+#         return Blog.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
-    def get_queryset(self):
-        return Blog.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # context['title'] = 'Категория - ' + str(context['posts'][0].cat)
-        # context['cat_selected'] = context['posts'][0].cat_id
-        # context['menu'] = menu
-        c = Category.objects.get(slug=self.kwargs['cat_slug'])
-        c_def = self.get_user_context(title='Категория - ' + str(c.name), cat_selected=c.pk)
-        return dict(list(context.items()) + list(c_def.items()))
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context['title'] = 'Категория - ' + str(context['posts'][0].cat)
+    #     # context['cat_selected'] = context['posts'][0].cat_id
+    #     # context['menu'] = menu
+    #     c = Category.objects.get(slug=self.kwargs['cat_slug'])
+    #     c_def = self.get_user_context(title='Категория - ' + str(c.name), cat_selected=c.pk)
+    #     return dict(list(context.items()) + list(c_def.items()))
 
 
 class ContactFormView(FormView):
@@ -66,7 +66,11 @@ class ContactFormView(FormView):
 
 
 def home(request):
-    return render(request, 'main_project/home.html')
+    context = {
+        'categories': ProductCategory.objects.all(),
+        'products': Product.objects.all(),
+    }
+    return render(request, 'main_project/home.html', context)
 
 
 def info(request):
@@ -115,18 +119,30 @@ def logoutuser(request):
 
 @login_required
 def sews(request):
-    sews = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', {'sews': sews})
+    context = {
+        'categories': ProductCategory.objects.all(),
+        'products': Product.objects.all(),
+    }
+    # sews = Todo.objects.filter(user=request.user, date_completed__isnull=True)
+    return render(request, 'main_project/sews.html', context) #, {'sews': sews}
 
 
 @login_required
 def todos(request):
-    todos = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', {'todos': todos})
+    # context = {
+    #     'categories': ProductCategory.objects.all(),
+    #     'products': Product.objects.all(),
+    # }
+    # todos = Todo.objects.filter(user=request.user, date_completed__isnull=True)
+    return render(request, 'main_project/sews.html', context)  #, {'todos': todos}
 
 
 def shemi_vishivki(request):
-    return render(request, 'main_project/shemi_vishivki.html')
+    context = {
+        'categories': ProductCategory.objects.all(),
+        'products': Product.objects.all(),
+    }
+    return render(request, 'main_project/shemi_vishivki.html', context)
 
 
 @login_required

@@ -13,10 +13,10 @@ class ContactForms(forms.Form):  # сами создаем форму
     # captcha = CaptchaField()
 
 
-class TodoForm(ModelForm):
-    class Meta:
-        model = Todo  # поля из какой модели
-        fields = ['title', 'category']
+# class TodoForm(ModelForm):
+#     class Meta:
+#         model = Todo  # поля из какой модели
+#         fields = ['title', 'category']
 
 
 class RegisterUserForm(UserCreationForm):

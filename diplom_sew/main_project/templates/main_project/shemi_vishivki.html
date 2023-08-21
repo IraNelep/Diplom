@@ -16,7 +16,13 @@
 
    Вышивайте на здоровье и легких вам крестиков!</p>
 <hr>
+{% for product in products %}
+<div class="shem">
+    <p class="text1">{{ product.name }}</p><br>
+ <p class="text1">{{ product.description }}</p><br>
 
+<img src="{{ product.image.url }}" alt="" class="img_shem"><br>
 
-
+</div>
+{% endfor %}
 {% endblock %}
