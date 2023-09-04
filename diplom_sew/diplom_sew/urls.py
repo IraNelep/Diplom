@@ -14,6 +14,8 @@ urlpatterns = [
     path('sews/', views.sews, name='sews'),
     path('todos/', views.todos, name='todos'),
     path('shemi_vishivki/', views.shemi_vishivki, name='shemi_vishivki'),
+    path('table_muline/', views.table_muline, name='table_muline'),
+    path('table_kruch/', views.table_kruch, name='table_kruch'),
 ]
 
 if settings.DEBUG:

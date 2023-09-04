@@ -1,0 +1,15 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content">
+<h2 class="title">Таблица перевода цветов ниток мулине</h2>
+<hr>
+<p class="text">Внимание! Из-за индивидуальных настроек вашего монитора возможны небольшие расхождения в точности
+    передачи цветов.</p><hr>
+
+<img src="{% static 'images/anchor.jpg' %}" alt="" class="content_img_muline" >
+</div>
+    <div >
+<a href="{% url 'table_kruch' %}" class="main2">Таблицы и обозначения для вязания крючком</a></div>
+{% endblock %}
+

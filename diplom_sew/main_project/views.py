@@ -34,35 +34,36 @@ from django.http import HttpResponse
     #     return dict(list(context.items()) + list(c_def.items()))
 
 
-class ContactFormView(FormView):
-    form_class = ContactForms
-    template_name = 'main_project/info.html'
-    success_url = reverse_lazy('home')
+# class ContactFormView(FormView):
+#     form_class = ContactForms()
+#     template_name = 'main_project/info.html'
+#     success_url = reverse_lazy('home')
+#
+#     # def get_context_data(self, *, object_list=None, **kwargs):
+#     #     context = super().get_context_data(**kwargs)
+#     #     c_def = self.get_user_context(title='Обратная связь')
+#     #     return dict(list(context.items()) + list(c_def.items()))
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     c_def = self.get_user_context(title='Обратная связь')
-    #     return dict(list(context.items()) + list(c_def.items()))
-
-    def form_valid(self, form):  # доп функционал
-        print(form.cleaned_data)
-        subject = 'Message'
-        body = {
+def form_valid(self, form):  # доп функционал
+    form = ContactForms()
+    print(form.cleaned_data)
+    subject = 'Message'
+    context = {
             'name': form.cleaned_data['name'],
             'email': form.cleaned_data['email'],
             'content': form.cleaned_data['content'],
-        }
-        message = '\n'.join(body.values())
-        try:
-            send_mail(
-                subject,
-                message,
-                form.cleaned_data['email'],
-                ['admin@localhost']
+    }
+    message = '\n'.join(context.values())
+    try:
+        send_mail(
+            subject,
+            message,
+            form.cleaned_data['email'],
+            ['admin@localhost']
             )
-        except BadHeaderError:
-            return HttpResponse('Найден некорректный заголовок')
-        return redirect('index')
+    except BadHeaderError:
+        return HttpResponse('Найден некорректный заголовок')
+    return redirect('index', context)
 
 
 def home(request):
@@ -74,7 +75,28 @@ def home(request):
 
 
 def info(request):
-    return render(request, 'main_project/info.html')
+#     form = ContactForms
+#     print(form.cleaned_data)
+#     context = {
+#         'name': form.cleaned_data['name'],
+#         'email': form.cleaned_data['email'],
+#         'text': form.cleaned_data['text'],
+#     }
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         c_def = self.get_user_context(title='Обратная связь')
+#         return dict(list(context.items()) + list(c_def.items()))
+#     message = '\n'.join(context.values())
+#     try:
+#         send_mail(
+#             context,
+#             message,
+#             form.cleaned_data['email'],
+#             ['admin@localhost']
+#             )
+#     except BadHeaderError:
+#         return HttpResponse('Найден некорректный заголовок')
+     return render(request, 'main_project/info.html')
 
 
 def signupuser(request):
@@ -143,6 +165,11 @@ def shemi_vishivki(request):
         'products': Product.objects.all(),
     }
     return render(request, 'main_project/shemi_vishivki.html', context)
+
+def table_muline(request):
+    return render(request, 'main_project/table_muline.html')
+def table_kruch(request):
+    return render(request, 'main_project/table_kruch.html')
 
 
 @login_required

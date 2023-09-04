@@ -105,13 +105,6 @@ ul {
     background: rgb(250, 186, 239);
 }
 
-.minitable {
-    border: 3px solid white;
-    width: 200px;
-    background: rgb(250, 186, 239, 0.7);
-    display: flex;
-    align-items: baseline
-}
 
 .name_table {
     margin-left: 10px;
@@ -193,4 +186,43 @@ button {
     color: #000000;
     font-weight: bold;
     text-align: center;
+}
+
+.main2 {
+    text-decoration: none;
+    color: #060007;
+    border: 3px solid white;
+    padding: 30px;
+    margin-left: 500px;
+    margin-bottom: 0;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    background: rgba(241, 221, 179, 0.5);
+}
+
+.content {
+    border: 3px solid white;
+    background: rgba(241, 221, 179, 0.5);
+    margin-bottom: 20px;
+}
+
+.content_img {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 320px;
+    margin-bottom: 20px;
+}
+
+.content_h2 {
+    color: rgb(255, 0, 93);
+}
+
+.content_img_muline {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1300px;
+    margin-left: 40px;
+    margin-bottom: 20px;
 }
