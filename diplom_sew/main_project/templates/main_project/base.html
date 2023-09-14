@@ -38,7 +38,7 @@
             <li><a href="{% url 'home' %}" class="main">Главная</a></li>
             <li><a href="{% url 'signupuser' %}" class="main">Зарегистрироваться</a></li>
             <li><a href="{% url 'loginuser' %}" class="main">Войти</a></li>
-            <li><a href="{% url 'info' %}" class="main">Информация о сайте</a></li>
+            <li><a href="{% url 'message' %}" class="main">Информация о сайте</a></li>
         </ul>
         {% endif %}
         <!--        <table class="minitable">&lt;!&ndash; форма входа        &ndash;&gt;-->
@@ -76,11 +76,10 @@
                     САЙТА</a><br>
 
                                         <img src="{% static 'images/1.png' %}" alt=""><a href="{% url 'shemi_vishivki' %}" class="tabl">Схемы вышивки</a><br>
-                                        <img src="{% static 'images/2.png' %}" alt=""><a href="" class="tabl">Схемы вязания</a><br>
-                                        <img src="{% static 'images/3.png' %}" alt=""><a href="" class="tabl">Книги</a><br>
-                                        <img src="{% static 'images/4.png' %}" alt=""><a href="" class="tabl">Журналы</a><br>
-                                        <img src="{% static 'images/5.png' %}" alt=""><a href="" class="tabl">Статьи</a><br>
-                                        <img src="{% static 'images/6.png' %}" alt=""><a href="{% url 'table_muline' %}" class="tabl">Таблицы</a><br>
+                                        <img src="{% static 'images/2.png' %}" alt=""><a href="{% url 'shemi_vyazania' %}" class="tabl">Схемы вязания</a><br>
+                                        <img src="{% static 'images/3.png' %}" alt=""><a href="{% url 'shemi_pletenia' %}" class="tabl">Схемы плетения</a><br>
+                                        <img src="{% static 'images/4.png' %}" alt=""><a href="" class="tabl">Статьи</a><br>
+                                        <img src="{% static 'images/5.png' %}" alt=""><a href="{% url 'table_muline' %}" class="tabl">Таблицы</a><br>
 
                 </td>
             </tr>

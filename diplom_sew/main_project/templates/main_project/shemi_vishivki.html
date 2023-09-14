@@ -2,9 +2,22 @@
 {% load static %}
 {% block content %}
 
+<div class="section__search">
+    <form action="{% url 'shemi_vishivki' %}" class="form" method="get">
+        <div class="form__field">
+
+            <input type="text" class="input_search" id="formInput#search" name="search_query"
+            placeholder="Поиск" value="{{ search_query }}">
+
+
+        <button class="btn_search" type="submit">Поиск</button></div>
+    </form>
+</div>
+
 <hr>
 <h2 class="title">Схемы вышивки крестиком в формате .xsd </h2>
-<p class="text">Вышивка крестом для многих рукодельниц является любимым видом хобби. Еще в давние времена вышивание крестиком
+<p class="text">Вышивка крестом для многих рукодельниц является любимым видом хобби. Еще в давние времена вышивание
+    крестиком
     ценилось как целое искусство, а мастерство вышивки передавалось из поколения в поколение. Шагая в ногу со временем,
     искусство вышивки крестом постоянно совершенствовалось и улучшалось. Сейчас, вышивка крестиком, занимает почетное
     место среди других женских хобби. Перед началом самого процесса вышивания нужно правильно подобрать схему вышивки,
@@ -15,15 +28,17 @@
     кухни, свадебные метрики, пейзажи, схемы вышивки икон, вышивка цветов, новогодняя и пасхальная вышивка и мн.др.
     Стараемся не допускать повторов схем вышивки в этих категориях. <br><br>
 
-   Вышивайте на здоровье и легких вам крестиков!</p>
+    Вышивайте на здоровье и легких вам крестиков!</p>
 <hr>
 {% for product in products %}
 <div class="shem">
-    <p class="text1">{{ product.name }}</p><br>
- <p class="text1">{{ product.description }}</p><br>
+<!--    <p class="text1">{{ product.name }}</p><br>-->
+    <p class="text1">{{ product.description }}</p><br>
 
-<img src="{{ product.image.url }}" alt="" class="img_shem"><br>
+    <img src="{{ product.image.url }}" alt="" class="img_shem"><br>
 
 </div>
 {% endfor %}
+{% include 'main_project/pagination.html' %}
+
 {% endblock %}

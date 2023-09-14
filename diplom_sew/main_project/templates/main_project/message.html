@@ -1,0 +1,29 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+
+<h3>
+    Оставьте нам свой отзыв!
+</h3>
+<form action="" method="POST">
+  {% csrf_token %}
+  <p>Имя: <input type="text" name="username" required></p>
+  <p>Email: <input type="email" name="email" required></p>
+  <p>Сообщение:</p>
+  <p><textarea name="message" cols="40" rows="7"></textarea></p>
+  <p><input type="submit" value="Отправить" class="btn"></p>
+
+
+</form>
+<!--&lt;!&ndash;форма для отзыва&ndash;&gt;-->
+<!--<form class='form' method="POST" enctype="multipart/form-data">-->
+<!--  {% csrf_token %}-->
+
+<!--    {% for field in form %}-->
+<!--    <label for="formInput#text"> {{ field }}</label>-->
+<!--    {{ field }}-->
+<!--    {% endfor %}-->
+<!--  <button>Отправить</button>-->
+<!--</form>-->
+
+{% endblock %}

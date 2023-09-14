@@ -13,45 +13,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
+from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-
-# class BlogCategory(ListView):
-#     model = Todo
-#     template_name = 'main_project/home.html'
-#     context_object_name = 'posts'
-#     allow_empty = False
-#
-#     def get_queryset(self):
-#         return Blog.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
-
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context['title'] = 'Категория - ' + str(context['posts'][0].cat)
-    #     # context['cat_selected'] = context['posts'][0].cat_id
-    #     # context['menu'] = menu
-    #     c = Category.objects.get(slug=self.kwargs['cat_slug'])
-    #     c_def = self.get_user_context(title='Категория - ' + str(c.name), cat_selected=c.pk)
-    #     return dict(list(context.items()) + list(c_def.items()))
-
-
-# class ContactFormView(FormView):
-#     form_class = ContactForms()
-#     template_name = 'main_project/info.html'
-#     success_url = reverse_lazy('home')
-#
-#     # def get_context_data(self, *, object_list=None, **kwargs):
-#     #     context = super().get_context_data(**kwargs)
-#     #     c_def = self.get_user_context(title='Обратная связь')
-#     #     return dict(list(context.items()) + list(c_def.items()))
 
 def form_valid(self, form):  # доп функционал
     form = ContactForms()
     print(form.cleaned_data)
     subject = 'Message'
     context = {
-            'name': form.cleaned_data['name'],
-            'email': form.cleaned_data['email'],
-            'content': form.cleaned_data['content'],
+        'name': form.cleaned_data['name'],
+        'email': form.cleaned_data['email'],
+        'content': form.cleaned_data['content'],
     }
     message = '\n'.join(context.values())
     try:
@@ -60,7 +33,7 @@ def form_valid(self, form):  # доп функционал
             message,
             form.cleaned_data['email'],
             ['admin@localhost']
-            )
+        )
     except BadHeaderError:
         return HttpResponse('Найден некорректный заголовок')
     return redirect('index', context)
@@ -74,29 +47,35 @@ def home(request):
     return render(request, 'main_project/home.html', context)
 
 
-def info(request):
-#     form = ContactForms
-#     print(form.cleaned_data)
-#     context = {
-#         'name': form.cleaned_data['name'],
-#         'email': form.cleaned_data['email'],
-#         'text': form.cleaned_data['text'],
-#     }
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         c_def = self.get_user_context(title='Обратная связь')
-#         return dict(list(context.items()) + list(c_def.items()))
-#     message = '\n'.join(context.values())
-#     try:
-#         send_mail(
-#             context,
-#             message,
-#             form.cleaned_data['email'],
-#             ['admin@localhost']
-#             )
-#     except BadHeaderError:
-#         return HttpResponse('Найден некорректный заголовок')
-     return render(request, 'main_project/info.html')
+def message(request):
+    recipient = 'iranelep@gmail.com'
+    form = MessageForm()
+
+    try:
+        sender = request.user.profile  # пользователь существует
+    except:
+        sender = None  # пользователя  нет
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.recipient = recipient
+
+            if sender:  # автоматический ввод имени и емейла если пользователь существует
+                message.name = sender.name
+                message.email = sender.email
+            message.save()
+
+            messages.success(request, 'Your message was successfully send!')
+            return redirect('message', pk=recipient)
+
+    context = {
+        'recipient': recipient,
+        'form': form
+    }
+    return render(request, 'main_project/message.html', context)
 
 
 def signupuser(request):
@@ -146,7 +125,7 @@ def sews(request):
         'products': Product.objects.all(),
     }
     # sews = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', context) #, {'sews': sews}
+    return render(request, 'main_project/sews.html', context)  # , {'sews': sews}
 
 
 @login_required
@@ -156,18 +135,50 @@ def todos(request):
     #     'products': Product.objects.all(),
     # }
     # todos = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', context)  #, {'todos': todos}
+    return render(request, 'main_project/sews.html', context)  # , {'todos': todos}
 
 
 def shemi_vishivki(request):
+    search_query = ''
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    prof = Product.objects.filter(name__icontains=search_query)
+    page = request.GET.get('page')
+    results = 2
+    paginator = Paginator(prof, results)
+
+    try:
+        prof = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        prof = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        prof = paginator.page(page)
+
     context = {
         'categories': ProductCategory.objects.all(),
-        'products': Product.objects.all(),
+        'products': prof,
+        'search_query': search_query,
+        'paginator': paginator,
+
     }
     return render(request, 'main_project/shemi_vishivki.html', context)
 
+
 def table_muline(request):
     return render(request, 'main_project/table_muline.html')
+
+
+def shemi_pletenia(request):
+    return render(request, 'main_project/shemi_pletenia.html')
+
+
+def shemi_vyazania(request):
+    return render(request, 'main_project/shemi_vyazania.html')
+
+
 def table_kruch(request):
     return render(request, 'main_project/table_kruch.html')
 

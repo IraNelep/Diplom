@@ -163,23 +163,26 @@ button {
 }
 
 .shem {
+    margin-left: 350px;
     border: 3px solid white;
-    width: 100%;
+    width: 600px;
     height: 500px;
-    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
 
 }
 
 
 .img_shem {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     border: 6px solid white;
-    margin: 20px 70px;
     font-size: 30px;
     width: 400px;
     height: 300px;
-    margin-bottom: 300px;
+    margin-bottom: 30px;
+
 }
 
 .text1 {
@@ -226,3 +229,61 @@ button {
     margin-left: 40px;
     margin-bottom: 20px;
 }
+
+.input_search {
+    width: 300px;
+    height: 50px;
+}
+
+.text_search {
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn_search {
+    background: rgb(250, 186, 239, 0.7);
+    border: 3px solid white;
+    font-family: 'Raleway', sans-serif;
+    color: #060007;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.section__search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+
+
+.pagination {
+    flex-wrap: wrap;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.pag {
+    background: rgb(250, 186, 239, 0.7);
+    border: 3px solid white;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+
+}
+
+.btn--sub {
+    background: rgba(157, 110, 149, 0.7);
+}
+
+/* .btn_page_link {
+    margin-top: 20px;
+} */
