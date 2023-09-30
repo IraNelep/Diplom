@@ -1,0 +1,22 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+ <!-- Main Section -->
+        <div class="singleproj">
+          <h2 class="singlname">{{ project.name }}</h2>
+
+          {% if project.source_link %}
+          <a class="singleProject__liveLink" href="{{ project.source_link }}" target="_blank"><i class="im im-external-link"></i>
+          </a>
+          {% endif %}
+        </div>
+        <div class="singleproj">
+          <img class="singleProject__preview" src="{{ project.image.url }}" alt="portfolio thumbnail" />
+          <div class="textbetw">
+            {{ project.description }}
+          </div>
+            </div>
+
+
+
+{% endblock %}

@@ -11,13 +11,18 @@ urlpatterns = [
     path('signupuser/', views.signupuser, name='signupuser'),
     path('logout/', views.logoutuser, name='logoutuser'),
     path('message/', views.message, name='message'),
-    path('sews/', views.sews, name='sews'),
-    path('todos/', views.todos, name='todos'),
+    path('create_project/', views.create_project, name='create_project'),
+    path('create_article/', views.create_article, name='create_article'),
+    path('create_vyaz/', views.create_vyaz, name='create_vyaz'),
     path('shemi_vishivki/', views.shemi_vishivki, name='shemi_vishivki'),
     path('table_muline/', views.table_muline, name='table_muline'),
     path('table_kruch/', views.table_kruch, name='table_kruch'),
     path('shemi_vyazania/', views.shemi_vyazania, name='shemi_vyazania'),
-    path('shemi_pletenia/', views.shemi_pletenia, name='shemi_pletenia'),
+    path('article/', views.article, name='article'),
+    path('project/<str:pk>/', views.project, name='project'),
+    path('single_article/<str:pk>/', views.single_article, name='single_article'),
+    path('single_vyaz/<str:pk>/', views.single_vyaz, name='single_vyaz'),
+    # path('verify/<str:email>/<uuid:code>/', views.EmailVerificationView.as_view(), name='email_verification'),
 ]
 
 if settings.DEBUG:

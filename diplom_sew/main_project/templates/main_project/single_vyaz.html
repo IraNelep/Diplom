@@ -1,0 +1,22 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+ <!-- Main Section -->
+        <div class="singleproj">
+          <h2 class="singlname">{{ vyaz.name }}</h2>
+
+          {% if vyaz.source_link %}
+          <a class="singleProject__liveLink" href="{{ project.source_link }}" target="_blank"><i class="im im-external-link"></i>
+          </a>
+          {% endif %}
+        </div>
+<div class="shem_art">
+          <img class="singleProject__preview" src="{{ vyaz.image.url }}" alt="portfolio thumbnail" />
+          <div class="textbetw">
+            {{ vyaz.description|striptags|linebreaksbr  }}
+          </div>
+            </div>
+
+
+
+{% endblock %}

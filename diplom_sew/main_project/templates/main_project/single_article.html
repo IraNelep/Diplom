@@ -1,0 +1,20 @@
+{% extends 'main_project/base.html' %}
+{% load static %}
+{% block content %}
+ <!-- Main Section -->
+<div class="shem_art">
+          <h2 class="singlname">{{ art.name }}</h2>
+
+          {% if art.source_link %}
+          <a class="singleProject__liveLink" href="{{ art.source_link }}" target="_blank"><i class="im im-external-link"></i>
+          </a>
+          {% endif %}
+
+        <div class="singleproj">
+
+          <div class="textbetw">
+            {{ art.description|striptags|linebreaksbr  }}
+          </div>
+            </div>     </div>
+
+{% endblock %}

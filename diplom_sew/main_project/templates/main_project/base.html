@@ -18,45 +18,30 @@
 <div class="menu">
     <div class="wrap1">
         <ul>
+            <li><a href="{% url 'home' %}"><img src="{% static 'images/main.png' %}" class="mainpic"></a></li>
             <li ><a href="" class="main">Пользователь: {{ user.username }}</a></li>
             <li><a href="{% url 'home' %}" class="main">Главная</a></li>
-            <li><a href="{% url 'sews' %}" class="main">Добавить выкройки</a></li>
+            <li><a href="{% url 'message' %}" class="main">Обратная связь</a></li>
             <li >
                 <form action="{% url 'logoutuser' %}" method="post">
                     {% csrf_token %}
                     <button class="main">Выйти</button>
                 </form>
             </li>
+
         </ul>
     </div>
 </div>
 {% else %}
 <div class="menu">
     <div class="wrap">
-        <!--        <img src="{% static 'images/menu.jpg' %}" alt="sew" class="img_menu">-->
-        <ul>
-            <li><a href="{% url 'home' %}" class="main">Главная</a></li>
+        <ul class="maimen">
+            <li><a href="{% url 'home' %}"><img src="{% static 'images/main.png' %}" class="mainpic"></a></li>
             <li><a href="{% url 'signupuser' %}" class="main">Зарегистрироваться</a></li>
             <li><a href="{% url 'loginuser' %}" class="main">Войти</a></li>
-            <li><a href="{% url 'message' %}" class="main">Информация о сайте</a></li>
+            <li><a href="{% url 'message' %}" class="main">Обратная связь</a></li>
         </ul>
         {% endif %}
-        <!--        <table class="minitable">&lt;!&ndash; форма входа        &ndash;&gt;-->
-        <!--            <tr>-->
-        <!--                <td><b>Добро пожаловать!</b></td>-->
-        <!--            </tr>-->
-        <!--            <tr>-->
-        <!--                <td></td>-->
-        <!--            </tr>-->
-        <!--        </table>-->
-        <!--        <table class="minitable">&lt;!&ndash; погода       &ndash;&gt;-->
-        <!--            <tr>-->
-        <!--                <td><b>Погода</b></td>-->
-        <!--            </tr>-->
-        <!--            <tr>-->
-        <!--                <td></td>-->
-        <!--            </tr>-->
-        <!--        </table>-->
     </div>
 </div>
 <div class="content">
@@ -64,7 +49,14 @@
     <h2 class="head2">
         БЕСПЛАТНЫЕ СХЕМЫ ВЫШИВКИ И ВЯЗАНИЯ
     </h2>
-
+<h2 class="error">{{ error }}</h2>
+{% if messages %}
+{% for message in messages %}
+<h2 class="error">{{ message }}</h2>
+{% endfor %}
+{% else %}
+<h2 class="error">{{ form.errors }}</h2>
+{% endif %}
     {% block content %}
     {% endblock %}
 
@@ -77,8 +69,7 @@
 
                                         <img src="{% static 'images/1.png' %}" alt=""><a href="{% url 'shemi_vishivki' %}" class="tabl">Схемы вышивки</a><br>
                                         <img src="{% static 'images/2.png' %}" alt=""><a href="{% url 'shemi_vyazania' %}" class="tabl">Схемы вязания</a><br>
-                                        <img src="{% static 'images/3.png' %}" alt=""><a href="{% url 'shemi_pletenia' %}" class="tabl">Схемы плетения</a><br>
-                                        <img src="{% static 'images/4.png' %}" alt=""><a href="" class="tabl">Статьи</a><br>
+                                        <img src="{% static 'images/4.png' %}" alt=""><a href="{% url 'article' %}" class="tabl">Статьи</a><br>
                                         <img src="{% static 'images/5.png' %}" alt=""><a href="{% url 'table_muline' %}" class="tabl">Таблицы</a><br>
 
                 </td>

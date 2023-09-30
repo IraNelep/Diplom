@@ -1,15 +1,37 @@
 {% extends 'main_project/base.html' %}
 {% load static %}
 {% block content %}
+<div class="register">
+<h1>Авторизация </h1>
 
-<h1>Авторизация: </h1>
-<h2>{{ error }}</h2>
-<form method="post" class="bg">
-    {% csrf_token %}
-    {{ form.as_p }}
-  <div class="center">
-        <button class="btn">Авторизация</button>
-  </div>
-</form>
+
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form1">
+                <label for="{{ form.username.id_form_label }}">Имя пользователя</label>
+                {{ form.username }}
+            </div>
+            <div class="form1">
+                <label for="{{ form.password.id_form_label }}">Пароль</label>
+                {{ form.password }}
+            </div>
+            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+    <button class="btn">Войти</button>
+            </div>  <p class="textup">Еще нет профиля? <a href="{% url 'signupuser' %}">Зарегистрируйтесь!</a></p>
+        </form>
+
+    </div>
+
+
+
+<!--<h2>{{ error }}</h2>-->
+<!--<form method="post" class="bg">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--  <div class="center">-->
+<!--        <button class="btn">Авторизация</button>-->
+<!--  </div>-->
+<!--</form>-->
 
 {% endblock %}

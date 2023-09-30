@@ -13,7 +13,11 @@
         <button class="btn_search" type="submit">Поиск</button></div>
     </form>
 </div>
-
+{% if user.is_authenticated %}
+<a href="{% url 'create_project' %}" class="main3">Добавить схему</a>
+{% else %}
+<p class="main2">Чтобы добавить свою схему,<a href="{% url 'loginuser' %}" >авторизируйтесь.</a> </p>
+{% endif %}
 <hr>
 <h2 class="title">Схемы вышивки крестиком в формате .xsd </h2>
 <p class="text">Вышивка крестом для многих рукодельниц является любимым видом хобби. Еще в давние времена вышивание
@@ -32,13 +36,13 @@
 <hr>
 {% for product in products %}
 <div class="shem">
-<!--    <p class="text1">{{ product.name }}</p><br>-->
-    <p class="text1">{{ product.description }}</p><br>
 
-    <img src="{{ product.image.url }}" alt="" class="img_shem"><br>
+    <p class="text1">{{ product.name }}</p><br>
+
+    <a href="{% url 'project' product.id %}"><img src="{{ product.image.url }}" alt="" class="img_shem"></a><br>
 
 </div>
 {% endfor %}
-{% include 'main_project/pagination.html' %}
+{% include 'main_project/pagination.html' with queryset=products %}
 
 {% endblock %}

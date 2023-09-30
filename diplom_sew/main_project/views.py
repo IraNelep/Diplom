@@ -4,39 +4,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.utils import timezone
-from .models import Product, ProductCategory
+from .models import *
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from .forms import *
-from django.urls import reverse_lazy  # как редирект в функциях
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail, BadHeaderError
+from django.conf import settings
 from django.http import HttpResponse
-from django.contrib import messages
+from django.contrib import auth, messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
-
-def form_valid(self, form):  # доп функционал
-    form = ContactForms()
-    print(form.cleaned_data)
-    subject = 'Message'
-    context = {
-        'name': form.cleaned_data['name'],
-        'email': form.cleaned_data['email'],
-        'content': form.cleaned_data['content'],
-    }
-    message = '\n'.join(context.values())
-    try:
-        send_mail(
-            subject,
-            message,
-            form.cleaned_data['email'],
-            ['admin@localhost']
-        )
-    except BadHeaderError:
-        return HttpResponse('Найден некорректный заголовок')
-    return redirect('index', context)
+from django.views.generic.base import TemplateView
+from .models import *
 
 
 def home(request):
@@ -46,96 +26,75 @@ def home(request):
     }
     return render(request, 'main_project/home.html', context)
 
-
 def message(request):
-    recipient = 'iranelep@gmail.com'
+    mess = Message.objects.all()
     form = MessageForm()
-
-    try:
-        sender = request.user.profile  # пользователь существует
-    except:
-        sender = None  # пользователя  нет
-
     if request.method == 'POST':
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = sender
-            message.recipient = recipient
+            form.save()
+            return redirect('message')
 
-            if sender:  # автоматический ввод имени и емейла если пользователь существует
-                message.name = sender.name
-                message.email = sender.email
-            message.save()
-
-            messages.success(request, 'Your message was successfully send!')
-            return redirect('message', pk=recipient)
-
-    context = {
-        'recipient': recipient,
-        'form': form
-    }
-    return render(request, 'main_project/message.html', context)
-
+    context = {'form': form,
+               'mess': mess}
+    return render(request, 'main_project/message.html', context)# '
 
 def signupuser(request):
-    if request.method == 'GET':
-        return render(request, 'main_project/signupuser.html', {'form': UserCreationForm()})
-    else:
-        if request.POST['password1'] == request.POST['password2']:
+    if request.method == 'POST':
+        form = RegisterUserForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            subject = 'Ура! Ваш аккаунт создан!'
+            message = username + '! Добро пожаловать на наш сайт! Ведите себя прилично.'
+            print(form.cleaned_data)
             try:
-                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
-                user.save()
-                login(request, user)
-                return redirect('home')
-            except IntegrityError:
-                return render(request, 'main_project/signupuser.html',
-                              {'form': UserCreationForm(),
-                               'error': 'Такое имя пользователя уже существует. Задайте другое имя.'})
-        else:
-            return render(request, 'main_project/signupuser.html',
-                          {'form': UserCreationForm(),
-                           'error': 'Пароли не совпадают.'})
+                send_mail(
+                    subject,
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    [email]
+                )
+            except BadHeaderError:
+                return HttpResponse('Обнаружен неверный заголовок')
+
+
+            messages.success(request, "Вы успешно зарегистрировались!")
+            form.save()
+            return redirect('loginuser')
+    else:
+        form = RegisterUserForm()
+    context = {
+        'title': 'Регистрация',
+        'form': form
+    }
+    return render(request, 'main_project/signupuser.html', context)
 
 
 def loginuser(request):
-    if request.method == 'GET':
-        return render(request, 'main_project/loginuser.html', {'form': AuthenticationForm()})
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                return redirect('home')
     else:
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is None:
-            return render(request, 'main_project/loginuser.html',
-                          {'form': AuthenticationForm(), 'error': 'Неверные данные для входа'})
-        else:
-            login(request, user)
-            return redirect('home')
+        form = AuthenticationForm()
+    context = {
+        'title': 'Авторизация',
+        'form': form
+    }
+    return render(request, 'main_project/loginuser.html', context)
 
 
-@login_required
+@login_required(login_url='loginuser')
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('home')
-
-
-@login_required
-def sews(request):
-    context = {
-        'categories': ProductCategory.objects.all(),
-        'products': Product.objects.all(),
-    }
-    # sews = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', context)  # , {'sews': sews}
-
-
-@login_required
-def todos(request):
-    # context = {
-    #     'categories': ProductCategory.objects.all(),
-    #     'products': Product.objects.all(),
-    # }
-    # todos = Todo.objects.filter(user=request.user, date_completed__isnull=True)
-    return render(request, 'main_project/sews.html', context)  # , {'todos': todos}
+        return redirect('loginuser')
 
 
 def shemi_vishivki(request):
@@ -171,31 +130,118 @@ def table_muline(request):
     return render(request, 'main_project/table_muline.html')
 
 
-def shemi_pletenia(request):
-    return render(request, 'main_project/shemi_pletenia.html')
+def article(request):
+    search_query = ''
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    arts = Article.objects.filter(name__icontains=search_query)
+    page = request.GET.get('page')
+    results = 2
+    paginator = Paginator(arts, results)
+
+    try:
+        arts = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        arts = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        arts = paginator.page(page)
+
+    context = {
+        'arts': arts,
+        'search_query': search_query,
+        'paginator': paginator,
+
+    }
+    return render(request, 'main_project/article.html', context)
 
 
 def shemi_vyazania(request):
-    return render(request, 'main_project/shemi_vyazania.html')
+    search_query = ''
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    vyaz = Vyazanie.objects.filter(name__icontains=search_query)
+    page = request.GET.get('page')
+    results = 2
+    paginator = Paginator(vyaz, results)
+
+    try:
+        vyaz = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        vyaz = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        vyaz = paginator.page(page)
+
+    context = {
+        'categories': ProductCategory.objects.all(),
+        'vyazanie': vyaz,
+        'search_query': search_query,
+        'paginator': paginator,
+
+    }
+    return render(request, 'main_project/shemi_vyazania.html', context)
 
 
 def table_kruch(request):
     return render(request, 'main_project/table_kruch.html')
 
 
-@login_required
-def sews(request):
-    if request.method == 'GET':
-        return render(request, 'main_project/sews.html', {'form': TodoForm()})
-    else:
-        try:
-            form = TodoForm(request.POST)  # все данные попадут в переменную пост
-            new_todo = form.save(commit=False)
-            new_todo.user = request.user  # models.py/class Todo/user
-            new_todo.save()
-            return redirect('sews')
-        except ValueError:
-            return render(request, 'main_project/sews.html', {
-                'form': TodoForm(),
-                'error': 'Неверные данные. Попробуйте еще раз.'
-            })
+@login_required(login_url='loginuser')
+def create_project(request):
+    form = ProjectForm()
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('shemi_vishivki')
+
+    context = {'form': form}
+    return render(request, 'main_project/create_project.html', context)
+
+
+@login_required(login_url='loginuser')
+def create_vyaz(request):
+    form = VyazanieForm()
+    if request.method == 'POST':
+        form = VyazanieForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('shemi_vyazania')
+
+    context = {'form': form}
+    return render(request, 'main_project/create_vyaz.html', context)
+
+
+@login_required(login_url='loginuser')
+def create_article(request):
+    form = ArticleForm()
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('article')
+
+    context = {'form': form}
+    return render(request, 'main_project/create_article.html', context)
+
+
+def project(request, pk):
+    project_obj = Product.objects.get(id=pk)
+    return render(request, 'main_project/single_project.html', {'project': project_obj})
+
+
+def single_article(request, pk):
+    art = Article.objects.get(id=pk)
+    return render(request, 'main_project/single_article.html', {'art': art})
+
+
+def single_vyaz(request, pk):
+    vyaz = Vyazanie.objects.get(id=pk)
+    return render(request, 'main_project/single_vyaz.html', {'vyaz': vyaz})
+
+
